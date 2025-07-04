@@ -1,0 +1,115 @@
+import java.util.ArrayList;
+
+class AutenticazioneException extends Exception {
+    public AutenticazioneException(String messaggio) {
+        super(messaggio);
+    }
+}
+
+// Interfaccia
+interface Autenticabile {
+    void autentica(String password) throws AutenticazioneException;
+}
+
+// Classe base
+class Utente {
+    protected String username;
+    protected String email;
+
+    public Utente(String username, String email) {
+        this.username = username;
+        this.email = email;
+    }
+
+    public void presentati() {
+        System.out.println("Utente generico: " + username + ", email: " + email);
+    }
+}
+
+// Studente
+class Studente extends Utente implements Autenticabile {
+    private String matricola;
+
+    public Studente(String username, String email, String matricola) {
+        super(username, email);
+        this.matricola = matricola;
+    }
+
+    @Override
+    public void presentati() {
+        System.out.println("Studente " + username + ", matricola: " + matricola);
+    }
+
+    @Override
+    public void autentica(String password) throws AutenticazioneException {
+        if (!password.equals("studente123")) {
+            throw new AutenticazioneException("Password errata per lo studente.");
+        }
+        System.out.println("Autenticazione studente riuscita.");
+    }
+}
+
+// Professore
+class Professore extends Utente implements Autenticabile {
+    private String materia;
+
+    public Professore(String username, String email, String materia) {
+        super(username, email);
+        this.materia = materia;
+    }
+
+    @Override
+    public void presentati() {
+        System.out.println("Professore " + username + ", insegna: " + materia);
+    }
+
+    @Override
+    public void autentica(String password) throws AutenticazioneException {
+        if (!password.equals("prof2024")) {
+            throw new AutenticazioneException("Password errata per il professore.");
+        }
+        System.out.println("Autenticazione professore riuscita.");
+    }
+}
+
+// Segreteria (non autenticabile)
+class Segreteria extends Utente {
+    private String ufficio;
+
+    public Segreteria(String username, String email, String ufficio) {
+        super(username, email);
+        this.ufficio = ufficio;
+    }
+
+    @Override
+    public void presentati() {
+        System.out.println("Personale di segreteria " + username + ", ufficio: " + ufficio);
+    }
+}
+
+// Classe principale con il main
+public class Main {
+    public static void main(String[] args) {
+        ArrayList<Utente> utenti = new ArrayList<>();
+        utenti.add(new Studente("marco", "marco@studenti.it", "S123"));
+        utenti.add(new Professore("giulia", "giulia@scuola.it", "Matematica"));
+        utenti.add(new Segreteria("paolo", "paolo@scuola.it", "Amministrazione"));
+
+        for (Utente u : utenti) {
+            u.presentati();
+
+            if (u instanceof Autenticabile) {
+                Autenticabile a = (Autenticabile) u;
+                try {
+                    a.autentica("passwordsbagliata"); // Cambia qui per testare login corretti
+                } catch (AutenticazioneException e) {
+                    System.out.println("Errore: " + e.getMessage());
+                }
+            } else {
+                System.out.println("Questo utente non è autenticabile.");
+            }
+
+            System.out.println(); // Riga vuota per separare gli output
+        }
+    }
+}
