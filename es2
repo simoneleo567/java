@@ -1,21 +1,9 @@
-public class Es2 {
-
-    public static void main(String[] args) {
-        Persona p = new Persona("Giovanni", "Verdi");
-        Studente s = new Studente("Mario", "Rossi", "S12345");
-        Professore prof = new Professore("Luca", "Bianchi", "Matematica");
-
-        p.presentati();
-        s.presentati();
-        prof.presentati();
-    }
-}
-
 // Classe base Persona
 class Persona {
-    String nome;
-    String cognome;
+    protected String nome;
+    protected String cognome;
 
+    // Costruttore
     public Persona(String nome, String cognome) {
         this.nome = nome;
         this.cognome = cognome;
@@ -28,13 +16,15 @@ class Persona {
 
 // Classe Studente che estende Persona
 class Studente extends Persona {
-    String matricola;
+    private String matricola;
 
+    // Costruttore
     public Studente(String nome, String cognome, String matricola) {
         super(nome, cognome);
         this.matricola = matricola;
     }
 
+    // Override del metodo presentati
     @Override
     public void presentati() {
         System.out.println("Sono lo studente " + nome + " " + cognome + ", matricola: " + matricola);
@@ -43,15 +33,36 @@ class Studente extends Persona {
 
 // Classe Professore che estende Persona
 class Professore extends Persona {
-    String materia;
+    private String materia;
 
+    // Costruttore
     public Professore(String nome, String cognome, String materia) {
         super(nome, cognome);
         this.materia = materia;
     }
 
+    // Override del metodo presentati
     @Override
     public void presentati() {
         System.out.println("Sono il prof. " + nome + " " + cognome + ", insegno " + materia);
     }
 }
+
+// Classe Main con il metodo main
+public class Main {
+    public static void main(String[] args) {
+        // Creo gli oggetti
+        Studente studente = new Studente("Mario", "Rossi", "S12345");
+        Professore professore = new Professore("Luisa", "Bianchi", "Matematica");
+        Persona persona = new Persona("Anna", "Verdi");
+
+        // Creo un array di tipo Persona
+        Persona[] persone = {studente, professore, persona};
+
+        // Ciclo for per chiamare presentati()
+        for (Persona p : persone) {
+            p.presentati();
+        }
+    }
+}
+
